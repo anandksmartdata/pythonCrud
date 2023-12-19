@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
+from werkzeug.utils import safe_str_cmp
 
 
 app = Flask(__name__)
