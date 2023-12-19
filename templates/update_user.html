@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Update User</title>
+
+    <script defer src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script
+      defer
+      src="{{ url_for('static', filename='js/update_user.js') }}"
+    ></script>
+  </head>
+
+  <body>
+    <h1>Update User</h1>
+
+    <form id="updateUserForm">
+      <div style="margin-top: 5px">
+        <label for="firstName">First Name:</label>
+        <input
+          style="margin-left: 10px"
+          type="text"
+          id="firstName"
+          name="firstName"
+          required
+        />
+      </div>
+
+      <div style="margin-top: 5px">
+        <label for="lastName">Last Name:</label>
+        <input
+          style="margin-left: 10px"
+          type="text"
+          id="lastName"
+          name="lastName"
+          required
+        />
+      </div>
+
+      <div style="margin-top: 5px">
+        <label for="email">Email:</label>
+        <input
+          style="margin-left: 10px"
+          type="email"
+          id="email"
+          name="email"
+          required
+        />
+      </div>
+
+      <div style="margin-top: 5px">
+        <label for="age">Age:</label>
+        <input style="margin-left: 10px" type="number" id="age" name="age" />
+      </div>
+
+      <button type="button" style="margin-top: 10px" onclick="updateUser()">
+        Update User
+      </button>
+
+      <!-- <button type="button" style="margin-top: 10px" id="updateButton">Update User</button> -->
+
+      <div style="margin-top: 10px">
+        <a href="{{ url_for('get_all_users') }}">Back to All Users</a>
+      </div>
+    </form>
+  </body>
+</html>
