@@ -1,0 +1,54 @@
+# version: '3'
+# services:
+#   web:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       - FLASK_ENV=development
+#     volumes:
+#       - .:/app
+#     depends_on:
+#       - db
+
+#   db:
+#     image: mysql:latest
+#     environment:
+#       MYSQL_ROOT_PASSWORD: Password123#@!
+#       MYSQL_DATABASE: testDatabase
+#       MYSQL_USER: root
+#       MYSQL_PASSWORD: Password123#@!
+#     ports:
+#       - "3306:3306"
+
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Password123#@!
+      MYSQL_DATABASE: testDatabase
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    networks:
+      - pythoncrud-network
+
+  web:
+    build: .
+    command: flask run --host=0.0.0.0
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - pythoncrud-network
+
+networks:
+  pythoncrud-network:
+    driver: bridge
