@@ -19,48 +19,43 @@
 
     <form id="updateUserForm">
       <div style="margin-top: 5px">
-        <label for="firstName">First Name:</label>
-        <input
-          style="margin-left: 10px"
-          type="text"
-          id="firstName"
-          name="firstName"
-          required
-        />
+        <div>
+          <label for="firstName">First Name:</label>
+        </div>
+        <input type="text" id="firstName" name="firstName" required />
       </div>
 
       <div style="margin-top: 5px">
-        <label for="lastName">Last Name:</label>
-        <input
-          style="margin-left: 10px"
-          type="text"
-          id="lastName"
-          name="lastName"
-          required
-        />
+        <div>
+          <label for="lastName">Last Name:</label>
+        </div>
+        <input type="text" id="lastName" name="lastName" required />
       </div>
 
       <div style="margin-top: 5px">
-        <label for="email">Email:</label>
-        <input
-          style="margin-left: 10px"
-          type="email"
-          id="email"
-          name="email"
-          required
-        />
+        <div>
+          <label for="email">Email:</label>
+        </div>
+        <input type="email" id="email" name="email" required />
       </div>
 
       <div style="margin-top: 5px">
-        <label for="age">Age:</label>
-        <input style="margin-left: 10px" type="number" id="age" name="age" />
+        <div>
+          <label for="age">Age:</label>
+        </div>
+        <input type="number" id="age" name="age" />
+      </div>
+
+      <div style="margin-top: 5px">
+        <div>
+          <label for="password">Password:</label>
+        </div>
+        <input type="password" id="password" name="password" />
       </div>
 
       <button type="button" style="margin-top: 10px" onclick="updateUser()">
         Update User
       </button>
-
-      <!-- <button type="button" style="margin-top: 10px" id="updateButton">Update User</button> -->
 
       <div style="margin-top: 10px">
         <a href="{{ url_for('get_all_users') }}">Back to All Users</a>
