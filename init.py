@@ -4,17 +4,17 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
-from werkzeug.utils import safe_str_cmp
+# from werkzeug.utils import safe_str_cmp
 
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Password123%23%40%21@localhost/testDatabase'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 CORS(app)
-load_dotenv()
 
 
 class Userdetails(db.Model):

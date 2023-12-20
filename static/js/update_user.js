@@ -18,7 +18,7 @@ const loadUserData = async () => {
     $.ajax({
       type: "GET",
       url: `${config.API_URL}/users/${userId}`,
-      
+
       success: function (data) {
         $("#firstName").val(data?.user?.firstName);
         $("#lastName").val(data?.user?.lastName);
@@ -44,13 +44,16 @@ const updateUser = async () => {
       lastName: $("#lastName").val(),
       email: $("#email").val(),
       age: $("#age").val(),
+      password: $("#password").val(),
     };
 
     $.ajax({
       type: "PUT",
       url: `${config.API_URL}/users/${userId}`,
+
       contentType: "application/json;charset=UTF-8",
       data: JSON.stringify(formData),
+
       success: (data) => {
         alert(data?.message);
         // window.location.href = "{{ url_for('get_all_users') }}";
