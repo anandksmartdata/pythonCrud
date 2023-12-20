@@ -1,18 +1,34 @@
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask.cli import FlaskGroup
 from flask_bcrypt import Bcrypt
-from flask_cors import CORS
 from dotenv import load_dotenv
+from flask_cors import CORS
+import secrets
 import os
+# from app.models.userDetails import UserDetails
 # from werkzeug.utils import safe_str_cmp
 
 load_dotenv()
+secret_key = secrets.token_hex(16)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = secret_key
+
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+# manager = Manager(app, db)
+# manager.add_command('db', MigrateCommand)
+cli = FlaskGroup(app)
+# Add the MigrateCommand to the FlaskGroup
+# cli.add_command('db', MigrateCommand)
+# cli = FlaskGroup(app)
+
+
 bcrypt = Bcrypt(app)
 CORS(app)
 
@@ -21,8 +37,8 @@ class Userdetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(50), nullable=False)
     lastName = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
-    age = db.Column(db.Integer)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    age = db.Column(db.Integer, nullable=True)
     password = db.Column(db.String(60), nullable=False)
 
 
@@ -110,7 +126,7 @@ def get_user_details(user_id):
 
 
 @app.route('/users', methods=['POST'])
-def create_ct_account():
+def create_new_user():
     try:
         data = request.get_json()
 
@@ -149,18 +165,33 @@ def update_user(user_id):
         data = request.get_json()
         user = Userdetails.query.get_or_404(user_id)
 
-        # Update user fields
         user.firstName = data.get('firstName', user.firstName)
         user.lastName = data.get('lastName', user.lastName)
         user.email = data.get('email', user.email)
         user.age = data.get('age', user.age)
+
+        password = data.get('password', user.password)
+
+        if password:
+            user.password = bcrypt.generate_password_hash(
+                password).decode('utf-8')
+
+        # print(f'User updated successfully: {user.__dict__}')
+
+        # hashed = user.password
+        # plain = data.get('password', user.password)
+        # print('hashed.................', hashed)
+        # print('plain.................', plain)
+        # check = bcrypt.check_password_hash(
+        #     hashed, plain)
+        # print('''check...............''', check)
 
         db.session.commit()
 
         return jsonify({'message': 'User updated successfully'}), 200
     except Exception as e:
         app.logger.error(f"An error occurred: {str(e)}")
-        return jsonify({'error': 'Internal Server Error'}), 500
+        return jsonify({f"error': 'Internal Server Error {str(e)}"}), 500
 
 
 @app.route('/users/<int:user_id>', methods=['DELETE'])
@@ -176,6 +207,9 @@ def delete_user(user_id):
         app.logger.error(f"An error occurred: {str(e)}")
         return jsonify({'error': 'Internal Server Error'}), 500
 
+
+# if __name__ == '__main__':
+#     cli()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
